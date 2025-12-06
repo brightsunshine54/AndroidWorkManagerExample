@@ -19,6 +19,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "AndroidWorkManegerExample"
+rootProject.name = "AndroidWorkManagerExample"
 include(":app")
  

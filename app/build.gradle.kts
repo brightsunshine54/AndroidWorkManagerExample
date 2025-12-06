@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace = "com.filantrop.androidworkmanegerexample"
+    namespace = "com.filantrop.androidworkmanagerexample"
     compileSdk {
         version = release(36)
     }

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">AndroidWorkManegerExample</string>
+    <string name="app_name">AndroidWorkManagerExample</string>
 
     <string name="auto_sni_label">Autoselect SNI</string>
     <string name="sni_features_label">SNI settings</string>

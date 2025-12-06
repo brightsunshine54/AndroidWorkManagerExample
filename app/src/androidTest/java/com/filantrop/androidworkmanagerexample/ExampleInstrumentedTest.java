@@ -1,4 +1,4 @@
-package com.filantrop.androidworkmanegerexample;
+package com.filantrop.androidworkmanagerexample;
 
 import android.content.Context;
 
