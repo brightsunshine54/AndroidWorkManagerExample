@@ -1,0 +1,46 @@
+package com.filantrop.androidworkmanagerexample.sni;
+
+import android.content.Context;
+
+import androidx.lifecycle.LiveData;
+
+import com.google.common.util.concurrent.ListenableFuture;
+
+import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+public class SniRepository {
+    private final SniDao sniDao;
+    private final ExecutorService executorService;
+
+    public SniRepository(Context context) {
+        this.sniDao = SniDatabase.getInstance(context.getApplicationContext()).sniDao();
+        this.executorService = Executors.newSingleThreadExecutor();
+    }
+
+    public ListenableFuture<List<SniDto>> getAllSniListenableFuture() {
+        return sniDao.getAllSniListenableFuture();
+    }
+
+    public List<String> getAllSniSync() {
+        return sniDao.getAllSniSync();
+    }
+
+    public LiveData<List<SniDto>> getAllSni() {
+        return sniDao.getAllSni();
+    }
+
+    public LiveData<Integer> getSniCountLiveData() {
+        return sniDao.getSniCountLiveDate();
+    }
+
+    public void insertAll(final List<SniDto> sniList) {
+        executorService.execute(() -> sniDao.insertAll(sniList));
+    }
+
+    public void deleteAll() {
+        executorService.execute(sniDao::deleteAll);
+    }
+
+}

@@ -2,10 +2,8 @@ package com.filantrop.androidworkmanagerexample;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
 
 public class SharedPrefUtils {
-    private static final String TAG = SharedPrefUtils.class.getSimpleName();
 
     /* SNI */
     public static String getSniHostname(Context context) {
