@@ -5,7 +5,8 @@
     <string name="sni_features_label">SNI settings</string>
     <string name="load_sni_from_file">Load SNI from file</string>
     <string name="delete_loaded_sni">Delete loaded SNI</string>
-    <string name="auto_select_sni">Start autoselect SNI</string>
+    <string name="auto_select_sni_start">Start autoselect SNI</string>
+    <string name="auto_select_sni_stop">Stop autoselect SNI</string>
     <string name="loaded_sni_label">Loaded to local DB SNI:</string>
 
     <string name="sni_text_description">Server Name Indication (SNI) — the website address declared when connecting to a VPN server. Please specify some popular website accessible without a VPN from your country.</string>

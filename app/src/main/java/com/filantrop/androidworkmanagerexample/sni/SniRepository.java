@@ -19,24 +19,20 @@ public class SniRepository {
         this.executorService = Executors.newSingleThreadExecutor();
     }
 
-    public ListenableFuture<List<SniDto>> getAllSniListenableFuture() {
-        return sniDao.getAllSniListenableFuture();
-    }
-
-    public List<String> getAllSniSync() {
-        return sniDao.getAllSniSync();
-    }
-
-    public LiveData<List<SniDto>> getAllSni() {
-        return sniDao.getAllSni();
-    }
-
     public LiveData<Integer> getSniCountLiveData() {
         return sniDao.getSniCountLiveDate();
     }
 
     public void insertAll(final List<SniDto> sniList) {
         executorService.execute(() -> sniDao.insertAll(sniList));
+    }
+
+    public void resetChecked() {
+        executorService.execute(() -> sniDao.resetChecked());
+    }
+
+    public ListenableFuture<Void> resetCheckedListenable() {
+        return sniDao.resetCheckedListenable();
     }
 
     public void deleteAll() {

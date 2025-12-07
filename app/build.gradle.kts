@@ -34,8 +34,8 @@ android {
 }
 
 dependencies {
-    annotationProcessor(libs.androidx.room.compiler)
     annotationProcessor(libs.lombock)
+    annotationProcessor(libs.androidx.room.compiler)
 
     implementation(libs.appcompat)
     implementation(libs.material)
@@ -44,6 +44,7 @@ dependencies {
     implementation(libs.androidx.room.guava)
     implementation(libs.androidx.room.runtime)
     implementation(libs.guava)
+    implementation(libs.worker)
 
     compileOnly(libs.lombock)
 

@@ -14,14 +14,8 @@ import java.util.List;
 @Dao
 public interface SniDao {
 
-    @Query("SELECT sni FROM sni_table")
-    List<String> getAllSniSync();
-
     @Query("SELECT * FROM sni_table")
-    ListenableFuture<List<SniDto>> getAllSniListenableFuture();
-
-    @Query("SELECT * FROM sni_table")
-    LiveData<List<SniDto>> getAllSni();
+    LiveData<List<SniDto>> getAll();
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     void insertAll(List<SniDto> sniList);
@@ -30,8 +24,24 @@ public interface SniDao {
     void deleteAll();
 
     @Query("SELECT COUNT(*) FROM sni_table")
-    int getSniCount();
+    int getTotalCount();
+
+    @Query("SELECT COUNT(*) FROM sni_table where checked = true")
+    int getCheckedCount();
+
+    @Query("SELECT * FROM sni_table WHERE checked = false ORDER BY id LIMIT 1")
+    SniDto getNextUnchecked();
 
     @Query("SELECT COUNT(*) FROM sni_table")
     LiveData<Integer> getSniCountLiveDate();
+
+    @Query("UPDATE sni_table set checked = true where id = :id")
+    void setChecked(int id);
+
+    @Query("UPDATE sni_table set checked = false")
+    void resetChecked();
+
+    @Query("UPDATE sni_table set checked = false")
+    ListenableFuture<Void> resetCheckedListenable();
+
 }

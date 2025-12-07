@@ -21,7 +21,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
@@ -44,7 +43,7 @@ public class SniDaoTest {
     }
 
     @After
-    public void closeDb() throws IOException {
+    public void closeDb() {
         db.close();
     }
 
@@ -56,12 +55,12 @@ public class SniDaoTest {
 
         sniDao.insertAll(snis);
 
-        LiveData<List<SniDto>> allSni = sniDao.getAllSni();
+        LiveData<List<SniDto>> allSni = sniDao.getAll();
         List<SniDto> observedSnis = getObservedValue(allSni);
 
         assertThat(observedSnis).hasSize(2);
-        assertThat(observedSnis.get(0).sni).isEqualTo("sni1");
-        assertThat(observedSnis.get(1).sni).isEqualTo("sni2");
+        assertThat(observedSnis.get(0).getSni()).isEqualTo("sni1");
+        assertThat(observedSnis.get(1).getSni()).isEqualTo("sni2");
     }
 
     @Test
@@ -72,11 +71,11 @@ public class SniDaoTest {
 
         sniDao.insertAll(snis);
 
-        LiveData<List<SniDto>> allSni = sniDao.getAllSni();
+        LiveData<List<SniDto>> allSni = sniDao.getAll();
         List<SniDto> observedSnis = getObservedValue(allSni);
 
         assertThat(observedSnis).hasSize(1);
-        assertThat(observedSnis.get(0).sni).isEqualTo("sni1");
+        assertThat(observedSnis.get(0).getSni()).isEqualTo("sni1");
     }
 
     @Test
@@ -87,10 +86,8 @@ public class SniDaoTest {
         sniDao.insertAll(snis);
         sniDao.deleteAll();
 
-        LiveData<List<SniDto>> allSni = sniDao.getAllSni();
-        List<SniDto> observedSnis = getObservedValue(allSni);
-
-        assertThat(observedSnis).isEmpty();
+        int count = sniDao.getTotalCount();
+        assertThat(count).isEqualTo(0);
     }
 
     @Test
@@ -101,13 +98,13 @@ public class SniDaoTest {
 
         sniDao.insertAll(snis);
 
-        int count = sniDao.getSniCount();
+        int count = sniDao.getTotalCount();
 
         assertThat(count).isEqualTo(2);
 
         sniDao.deleteAll();
 
-        count = sniDao.getSniCount();
+        count = sniDao.getTotalCount();
         assertThat(count).isEqualTo(0);
     }
 

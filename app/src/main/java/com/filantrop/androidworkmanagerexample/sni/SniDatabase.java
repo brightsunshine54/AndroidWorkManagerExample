@@ -15,7 +15,7 @@ public abstract class SniDatabase extends RoomDatabase {
     public static synchronized SniDatabase getInstance(Context context) {
         if (instance == null) {
             instance = Room.databaseBuilder(context.getApplicationContext(), SniDatabase.class, "SniDatabase")
-                    .fallbackToDestructiveMigration()
+                    .fallbackToDestructiveMigration(true)
                     .build();
         }
         return instance;

@@ -1,5 +1,7 @@
 package com.filantrop.androidworkmanagerexample;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,7 +11,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
@@ -21,11 +26,16 @@ public class MainActivity extends AppCompatActivity {
 
     private Button loadSniButton;
     private Button deleteSniButton;
-    private Button autoSelectSniButton;
+    private Button autoSelectSniButtonStart;
+    private Button autoSelectSniButtonStop;
     private View currentSniLayout;
+    private View sniProgressLayout;
     private TextView currentSniText;
+    private TextView progressTextValue;
 
     private AlertDialog autoSelectDialog;
+
+    private ActivityResultLauncher<Intent> filePickerLauncher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,14 +48,10 @@ public class MainActivity extends AppCompatActivity {
         // Initialize buttons
         loadSniButton = findViewById(R.id.load_sni_button);
         deleteSniButton = findViewById(R.id.delete_sni_button);
-        autoSelectSniButton = findViewById(R.id.auto_select_sni_button);
 
         // Set click listeners
-        loadSniButton.setOnClickListener(v -> mainViewModel.handleLoadSniClick());
-
-        deleteSniButton.setOnClickListener(v -> mainViewModel.handleDeleteSniClick());
-
-        autoSelectSniButton.setOnClickListener(v -> showAutoSelectDialog());
+        loadSniButton.setOnClickListener(v -> onLoadButtonClicked());
+        deleteSniButton.setOnClickListener(v -> onDeleteButtonClicked());
 
         // Initialize current SNI layout
         currentSniLayout = findViewById(R.id.current_sni_layout);
@@ -57,8 +63,40 @@ public class MainActivity extends AppCompatActivity {
             showChangeSniDialog();
         });
 
+        sniProgressLayout = findViewById(R.id.sni_progress_layout);
+        autoSelectSniButtonStart = findViewById(R.id.auto_select_sni_button_start);
+        autoSelectSniButtonStop = findViewById(R.id.auto_select_sni_button_stop);
+
+        mainViewModel.getSearchInProgress().observe(this, (inProgress) -> {
+            autoSelectSniButtonStart.setEnabled(!inProgress);
+            autoSelectSniButtonStop.setEnabled(inProgress);
+            sniProgressLayout.setVisibility(inProgress ? View.VISIBLE : View.GONE);
+        });
+
+        autoSelectSniButtonStart.setOnClickListener(v->{
+            showAutoSelectDialog();
+        });
+
+        autoSelectSniButtonStop.setOnClickListener(v->{
+            mainViewModel.stopSNISearch();
+        });
+
         // Observe ViewModel LiveData if needed
         observeViewModel();
+
+        // Register the activity result launcher
+        // This must be done in onCreate or as a class member initializer.
+        filePickerLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(), result -> {
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        Intent data = result.getData();
+                        if (data != null && data.getData() != null) {
+                            mainViewModel.readFileContent(this, data.getData());
+                        }
+                    } else {
+                        Log.w(TAG, "File selection cancelled.");
+                    }
+                });
     }
 
     private void observeViewModel() {
@@ -141,5 +179,26 @@ public class MainActivity extends AppCompatActivity {
 
         autoSelectDialog.show();
     }
+
+
+    private void onDeleteButtonClicked() {
+        mainViewModel.deleteAllSni();
+        Toast.makeText(this, "All loaded SNI have been deleted.", Toast.LENGTH_SHORT).show();
+    }
+
+    private void onLoadButtonClicked() {
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("text/plain");
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+
+        try {
+            // Launch the intent using the ActivityResultLauncher
+            filePickerLauncher.launch(Intent.createChooser(intent, "Select a SNI file"));
+        } catch (android.content.ActivityNotFoundException ex) {
+            // Potentially handle the case where the device has no file manager
+            Toast.makeText(this, "Please install a File Manager.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
 
 }
