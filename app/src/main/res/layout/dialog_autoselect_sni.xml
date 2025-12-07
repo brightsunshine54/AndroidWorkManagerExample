@@ -17,8 +17,6 @@
         android:id="@+id/dialog_server_spinner"
         android:layout_width="match_parent"
         android:layout_height="52dp"
-        android:background="@drawable/round_back_spinner_down"
-        android:popupBackground="@drawable/spinner_background_up"
         android:spinnerMode="dropdown" />
 
     <!-- Button Bar -->

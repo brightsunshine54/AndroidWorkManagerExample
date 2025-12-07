@@ -2,6 +2,7 @@ package com.filantrop.androidworkmanagerexample;
 
 import android.app.Application;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -46,13 +47,14 @@ public class MainViewModel extends AndroidViewModel {
         currentSni.postValue(newSniValue);
     }
 
-    public void resetSniToDefult() {
+    public void resetSniToDefault() {
         Log.i(TAG, "Reset SNI to default");
         SharedPrefUtils.resetToDefaultSniHostname(getApplication());
         currentSni.postValue(getApplication().getString(R.string.default_sni));
     }
 
     public void startSNISearch(String selectedServer) {
-
+        Log.d(TAG, "Starting SNI auto-select for server: " + selectedServer);
+        Toast.makeText(getApplication(), "Starting auto-select for " +selectedServer, Toast.LENGTH_SHORT).show();
     }
 }

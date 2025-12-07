@@ -9,7 +9,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -91,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Add buttons
         builder.setPositiveButton("OK", (dialog, which) -> mainViewModel.updateCurrentSni(input.getText().toString().trim()));
-        builder.setNeutralButton(getString(R.string.reset_default_button), (dialog, which) -> mainViewModel.resetSniToDefult());
+        builder.setNeutralButton(getString(R.string.reset_default_button), (dialog, which) -> mainViewModel.resetSniToDefault());
         builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
 
         // Show the dialog
@@ -135,9 +134,6 @@ public class MainActivity extends AppCompatActivity {
             // Get the originally selected server object
             int selectedPosition = serverSpinner.getSelectedItemPosition();
             String selectedServer = mainViewModel.getServers().get(selectedPosition);
-
-            Log.d(TAG, "Starting SNI auto-select for server: " + selectedServer);
-            Toast.makeText(this, "Starting auto-select for " +selectedServer, Toast.LENGTH_SHORT).show();
 
             mainViewModel.startSNISearch(selectedServer);
             autoSelectDialog.dismiss();
