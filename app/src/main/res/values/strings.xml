@@ -13,4 +13,7 @@
     <string name="default_sni" translatable="false">yandex.ru</string>
     <string name="sni_text_view_hint">New SNI</string>
     <string name="reset_default_button">Reset to default</string>
+
+    <string name="select_server_for_autoselect">Select Server for SNI Autoselect</string>
+    <string name="start_button_label">Start</string>
 </resources>

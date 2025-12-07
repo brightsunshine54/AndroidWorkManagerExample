@@ -5,24 +5,27 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+
+import java.util.List;
+
+import lombok.Getter;
 
 public class MainViewModel extends AndroidViewModel {
     private final String TAG = this.getClass().getSimpleName();
 
     // LiveData for SNI text field
+    @Getter
     private final MutableLiveData<String> currentSni = new MutableLiveData<>("yandex.ru");
+
+    @Getter
+    private final List<String> servers = List.of("Sweden", "Denmark", "Italy");
 
     public MainViewModel(@NonNull Application application) {
         super(application);
 
         String sniHostname = SharedPrefUtils.getSniHostname(application);
         currentSni.postValue(sniHostname);
-    }
-
-    public LiveData<String> getCurrentSni() {
-        return currentSni;
     }
 
     public void handleLoadSniClick() {
@@ -37,12 +40,6 @@ public class MainViewModel extends AndroidViewModel {
         // This method will be called when "Delete loaded SNI" button is clicked
     }
 
-    public void handleAutoSelectSniClick() {
-        Log.i(TAG, "Handling auto select SNI request in ViewModel");
-        // TODO: Implement auto selecting SNI functionality
-        // This method will be called when "Auto select SNI" button is clicked
-    }
-
     public void updateCurrentSni(String newSniValue) {
         Log.i(TAG, "Updating SNI value to: " + newSniValue);
         SharedPrefUtils.saveSniHostname(getApplication(), newSniValue);
@@ -53,5 +50,9 @@ public class MainViewModel extends AndroidViewModel {
         Log.i(TAG, "Reset SNI to default");
         SharedPrefUtils.resetToDefaultSniHostname(getApplication());
         currentSni.postValue(getApplication().getString(R.string.default_sni));
+    }
+
+    public void startSNISearch(String selectedServer) {
+
     }
 }
